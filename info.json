@@ -1,0 +1,7 @@
+{
+ "Author": "Urs Voegele",
+ "Repository": "git@github.com:elegoev/basebox-ubuntu-18.04-k3s.git",
+ "OS": "Ubuntu",
+ "Description": "vagrant basebox with ubuntu 18.04 & k3s",
+ "Version Description": "k3s release update"
+}

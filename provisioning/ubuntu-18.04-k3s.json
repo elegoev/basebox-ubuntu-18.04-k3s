@@ -1,0 +1,24 @@
+{
+  "hostvars":
+  {
+    "vagrant_image":         "elegoev/ubuntu-18.04",
+    "vagrant_ram":           "2048",
+    "vagrant_cpu":           "2",
+    "vb_hostname":           "k3s",
+    "vb_guest_os":           "ubuntu",
+    "vb_group":              "vagrant-ubuntu-basebox",
+    "vb_network": [
+      {
+        "ip":      "171.16.1.20",
+        "netmask": "255.255.255.0",
+        "netname": "vagrant-ubuntu1804-k3s-net1",
+        "nictype": "82540EM"
+      }
+    ],
+    "vb_shell_provisioner": [
+      {
+        "script": "ubuntu-18.04-k3s.sh"
+      }
+    ]
+  }
+}

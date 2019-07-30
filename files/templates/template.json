@@ -1,0 +1,83 @@
+{
+  "hostvars":
+  {
+    "vagrant_image":         "<image name>",
+    "vagrant_image_version": "<image version>",                                 [optional]
+    "vagrant_ram":           "<ram size>",
+    "vagrant_cpu":           "<number of cpu",
+    "vb_hostname":           "<virtualbox hostname>",                           [optional]
+    "vb_guest_os":           "ubuntu | centos | win",                           [optinal / default = ubuntu]
+    "vb_group":              "<virtualbox group name>",
+    "vb_gateway":            "<ip number gateway",                              [optional]
+    "vb_dnshostresolve":     true | false,                                      [optional]
+    "vb_rdp_port":           "<port number on host for RDP port forwarding>",   [optional / windows]
+    "vb_network": [                                                             [optional]
+      {
+        "ip":      "<network ip number    first network interface>",
+        "netmask": "<network netmask      first network interface>",
+        "netname": "<network netname      first network interface>",            [optional / default = internal-net for nettype = internal]
+        "nictype": "<network nicname      first network interface>",
+        "adapter": "<network adapter name first network interface>",            [optional / required for hostonly network]
+        "nettype": "internal | hostonly",                                       [optional / default = internal]
+        "mac":     "<mac addresse>"                                             [optional]
+      },
+      {
+        "ip":      "<network ip number    second network interface>",
+        "netmask": "<network netmask      second network interface>",
+        "netname": "<network netname      second network interface>",           [optional / default = internal-net for nettype = internal]
+        "nictype": "<network netname      second network interface>",
+        "adapter": "<network adapter name second network interface>",           [optional / required for hostonly network]
+        "nettype": "internal | hostonly",                                       [optional / default = internal]
+        "mac":     "<mac addresse>"                                             [optional]
+      }
+    ],
+    "vb_port_forwarding": [                                                     [optional]
+      {
+        "auto_correct": true | false,                                           [optional / default = false]
+        "host":         "<port number on host>",
+        "host_ip":      "<ip nubmer on host>",                                  [optional / default = 127.0.0.1]
+        "guest":        "<port number on guest>",
+        "guest_ip":     "<ip nubmer on guest>",                                 [optional / default = 127.0.0.1]
+        "protocol":     "udp | tcp",                                            [optional / default = tcp]
+        "id":           "<forwarding description>"                              [optional / default = %protocol%%guest%]
+      },
+      {
+        "auto_correct": true | false,                                           [optional / default = false]
+        "host":         "<port number on host>",
+        "host_ip":      "<ip nubmer on host>",                                  [optional / default = 127.0.0.1]
+        "guest":        "<port number on guest>",
+        "guest_ip":     "<ip nubmer on guest>",                                 [optional / default = 127.0.0.1]
+        "protocol":     "udp | tcp",                                            [optional / default = tcp]
+        "id":           "<forwarding description>"                              [optional / default = %protocol%%guest%]
+      }
+    ],
+    "vb_share": [                                                               [optional]
+      {
+        "srcdir": "<path on host>",
+        "desdir": "<path on guest"
+      },
+    ],
+    "vb_shell_provisioner": [                                                   [optional]
+      { "script": "provisioning script file name" },
+      { "script": "provisioning script file name" }
+    ],
+    "vb_ansible_provisioner": [                                                   [optional]
+      {
+        "provisioning_path": "<ansible home directory>",
+        "playbook":          "<relativ playbook directory",
+        "verbose":           true | false,
+        "install":           true | false,
+        "limit":             "all | group | host",
+        "inventory_path":    "<inventory file>"
+      },
+      {
+        "provisioning_path": "<ansible home directory>",
+        "playbook":          "<relativ playbook directory",
+        "verbose":           true | false,
+        "install":           true | false,
+        "limit":             "all | group | host",
+        "inventory_path":    "<inventory file>"
+      }
+    ]
+  }
+}
