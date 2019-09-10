@@ -5,7 +5,7 @@ Vagrant Box with Ubuntu 18.04 & k3s
 Used base image [elegoev/ubuntu-18.04](https://app.vagrantup.com/elegoev/boxes/ubuntu-18.04)
 
 ### Automatic provisioning
-The base image is provisioned with bash script [ubuntu-18.04-k3s.sh](https://github.com/elegoev/vagrant-ubuntu1804-k3s/blob/master/provisioning/ubuntu-18.04-k3s.sh)
+The base image is provisioned with bash script [ubuntu-18.04-k3s.sh](https://github.com/elegoev/basebox-ubuntu-18.04-k3s/blob/master/provisioning/ubuntu-18.04-k3s.sh)
 
 ### References
 - [k3s.io](https://k3s.io/)
