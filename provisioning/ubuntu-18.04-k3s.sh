@@ -14,4 +14,4 @@ DATE=`date +%Y%m%d%H%M`
 
 # store k3s version
 K3S_VERSION=$(sudo k3s --version | awk  '{print $3}' | tr --delete v)
-echo "$K3S_VERSION.$DATE" > /vagrant/version
+echo "k3s-$K3S_VERSION" > /vagrant/version
