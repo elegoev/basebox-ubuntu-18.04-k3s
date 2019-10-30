@@ -11,6 +11,15 @@ The base image is provisioned with bash script [ubuntu-18.04-k3s.sh](https://git
 - [k3s.io](https://k3s.io/)
 - [k3s github](https://github.com/rancher/k3s)
 
+### Configuration
+#### Required Vagrant Plugins
+- vagrant-disksize
+- vagrant-hosts
+- vagrant-secret
+- vagrant-share
+- vagrant-vbguest
+- vagrant-vmware-esxi
+
 ###  Create Vagrant Box Environment
 #### Provider "virtualbox"
 1. Create directory `mkdir "name of directory"`
