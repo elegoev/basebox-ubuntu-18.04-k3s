@@ -10,7 +10,6 @@ The base image is provisioned with bash script [ubuntu-18.04-k3s.sh](https://git
 ### References
 - [k3s.io](https://k3s.io/)
 - [k3s github](https://github.com/rancher/k3s)
-- [Used Vagrantfile for Basebox](https://github.com/elegoev/vagrant-ubuntu-18.04/blob/master/jenkins/vagrant/esxi/_Vagrantfile)
 
 ###  Create Vagrant Box Environment
 #### Provider "virtualbox"
