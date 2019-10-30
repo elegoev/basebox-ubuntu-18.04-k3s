@@ -23,9 +23,9 @@ The base image is provisioned with bash script [ubuntu-18.04-k3s.sh](https://git
 1. Create directory `mkdir "name of directory"`
 1. Goto directory `cd "name of directory"`
 1. Download basebox `vagrant box add "elegoev/ubuntu-18.04-k3s" --provider vmware_esxi`
-1. Create Vagrantfile `vagrant init "elegoev/ubuntu-18.04-k3s"`
-1. Create file [`metadata.json`](https://github.com/elegoev/vagrant-ubuntu-18.04/blob/master/jenkins/vagrant/metadata.json.tpl)
-1. Copy and edit [`box.json`](https://github.com/elegoev/vagrant-ubuntu-18.04/blob/master/jenkins/vagrant/box.json.tpl)
+1. Create [Vagrantfile](https://github.com/elegoev/vagrant-ubuntu-18.04-images/blob/master/jenkins/vagrant/Vagrantfile.tpl)
+1. Create file [`metadata.json`](https://github.com/elegoev/vagrant-ubuntu-18.04-images/blob/master/jenkins/vagrant/metadata.json.tpl)
+1. Copy and edit [`box.json`](https://github.com/elegoev/vagrant-ubuntu-18.04-images/blob/master/jenkins/vagrant/box.json)
 1. Start vagrant box `vagrant up --provider vmware_esxi`
 
 ### Versioning
