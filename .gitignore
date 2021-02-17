@@ -1,14 +1,11 @@
 .DS_Store
 .vagrant
-deploy2*.ps1
-ansible-epr-inf/
-rolesfromgalaxy/
-rolesfromgitlab/
-files-trans/
-shared_files/
-ovf/
-backup/
-box/
-rspec_html_reports/
 version
+deploy2*.ps1
+*.log
+*.lock
+packer_build_dir/
+rspec_html_reports/
+**/provision/installed-application.md
+
 

@@ -1,52 +1,86 @@
-## ubuntu-18.04-k3s
-Vagrant Box with Ubuntu 18.04 & k3s
+# ubuntu-18.04-k3s
 
-### Base image
+Vagrant Box with Ubuntu 18.04 and k3s
+
+## Base image
+
 Used base image [elegoev/ubuntu-18.04](https://app.vagrantup.com/elegoev/boxes/ubuntu-18.04)
 
-### Automatic provisioning
-The base image is provisioned with bash script [ubuntu-18.04-k3s.sh](https://github.com/elegoev/basebox-ubuntu-18.04-k3s/blob/master/provisioning/ubuntu-18.04-k3s.sh)
+## Directory Description
 
-### References
+| directory | description                                          |
+|-----------|------------------------------------------------------|
+| inspec    | inspec test profiles with controls                   |
+| packer    | packer build, provisioner and post-processor scripts |
+| test      | test environment for provision & inspec development  |
+
+## Configuration
+
+### Vagrant Cloud
+
+- [elegoev/ubuntu-18.04-k3s](https://app.vagrantup.com/elegoev/boxes/ubuntu-18.04-k3s)
+
+### Useful Vagrant Plugins
+
+- [vagrant-disksize](https://github.com/sprotheroe/vagrant-disksize)
+- [vagrant-hosts](https://github.com/oscar-stack/vagrant-hosts)
+- [vagrant-secret](https://github.com/tcnksm/vagrant-secret)
+- [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
+- [vagrant-serverspec](https://github.com/vvchik/vagrant-serverspec)
+- [vagrant-vmware-esxi](https://github.com/josenk/vagrant-vmware-esxi)
+
+### Using k3s
+
+#### Vagrantfile
+
+    Vagrant.configure("2") do |config|
+
+        $basebox_name="ubuntu-18.04-k3s-test"
+        $basebox_hostname="ubuntu-1804-k3s-test"
+        $src_image_name="elegoev/ubuntu-18.04-k3s"
+        $vb_group_name="basebox-k3s-test"
+
+        config.vm.define "#{$basebox_name}" do |machine|
+          machine.vm.box = "#{$src_image_name}"
+    
+          # define guest hostname
+          machine.vm.hostname = "#{$basebox_hostname}"
+
+          machine.vm.provider "virtualbox" do |vb|
+            vb.name = $basebox_name
+            vb.cpus = 1
+            vb.customize ["modifyvm", :id, "--memory", "1024" ]
+            vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+            vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+            vb.customize ["modifyvm", :id, "--groups", "/#{$vb_group_name}" ]
+            vb.customize ["modifyvm", :id, "--vram", 256 ]
+          end
+
+        end   
+
+    end
+
+#### Help
+
+    k3s --help
+
+### Referenzen
+
 - [k3s.io](https://k3s.io/)
 - [k3s github](https://github.com/rancher/k3s)
 
-### Configuration
-#### Required Vagrant Plugins
-- vagrant-disksize
-- vagrant-hosts
-- vagrant-secret
-- vagrant-share
-- vagrant-vbguest
-- vagrant-vmware-esxi
-
-###  Create Vagrant Box Environment
-#### Provider "virtualbox"
-1. Create directory `mkdir "name of directory"`
-1. Goto directory `cd "name of directory"`
-1. Create Vagrantfile `vagrant init "elegoev/ubuntu-18.04-k3s"`
-1. Start vagrant box `vagrant up`
-
-#### Provider "vmware_esxi"
-1. Create directory `mkdir "name of directory"`
-1. Goto directory `cd "name of directory"`
-1. Download basebox `vagrant box add "elegoev/ubuntu-18.04-k3s" --provider vmware_esxi`
-1. Create secret file `.vagrant/secret.yaml`
-   - add `esxi_username: "<ESXi root username"`
-   - add `esxi_password: "<ESXi root password"`
-1. Create [Vagrantfile](https://github.com/elegoev/vagrant-ubuntu-18.04-images/blob/master/jenkins/vagrant/Vagrantfile.tpl)
-1. Create file [`metadata.json`](https://github.com/elegoev/vagrant-ubuntu-18.04-images/blob/master/jenkins/vagrant/metadata.json.tpl)
-1. Copy and edit [`box.json`](https://github.com/elegoev/vagrant-ubuntu-18.04-images/blob/master/jenkins/vagrant/box.json)
-1. Start vagrant box `vagrant up --provider vmware_esxi`
-
 ### Versioning
-Repository follows sematic versioning  [![](https://img.shields.io/badge/semver-2.0.0-green.svg)](http://semver.org)
+
+Repository follows sematic versioning  [![semantic versioning](https://img.shields.io/badge/semver-2.0.0-green.svg)](http://semver.org)
 
 ### Changelog
+
 For all notable changes see [CHANGELOG](https://github.com/elegoev/basebox-ubuntu-18.04-k3s/blob/master/CHANGELOG.md)
 
 ### License
+
 Licensed under The MIT License (MIT) - for the full copyright and license information, please view the [LICENSE](https://github.com/elegoev/basebox-ubuntu-18.04-k3s/blob/master/LICENSE) file.
 
 ### Issue Reporting
-Any and all feedback is welcome.  Please let me know of any issues you may find in the bug tracker on github. You can find it [here. ](https://github.com/elegoev/basebox-ubuntu-18.04-k3s/issues)
+
+Any and all feedback is welcome.  Please let me know of any issues you may find in the bug tracker on github. You can find it [here.](https://github.com/elegoev/basebox-ubuntu-18.04-k3s/issues)

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<!-- prior comment allows JS to execute on IE when saved as a local file, "MOTW" -->
+<html lang="en">
+  <head>
+    <title>Chef InSpec Results</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+    /* Must inline all CSS files, this is a single-file output that may be airgapped */
+    body {
+  margin: 20px 10% 20px 10%;
+  padding: 0;
+  background: #fff;
+}
+h1, h2, h3, h4, h5 {
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+}
+h1, h2 {
+  padding: 10px;
+  text-align: center
+}
+table.info th, table.info th {
+  padding: 2px;
+}
+table.info th {
+  text-align: right;
+}
+.hidden {
+  display: none;
+}
+pre code {
+  background-color: #eee;
+  border: 1px solid #999;
+  display: block;
+  padding: 20px;
+}
+
+.profile, .control, .profile-metadata {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px auto;
+}
+
+.resource-title {
+  margin-left: 2.5%;
+}
+
+.control-title code,
+.resource-title code {
+  font-size: larger;
+}
+.control-metadata .status div,
+.result-metadata .status div {
+  color: white;
+  font-weight: bold;
+  width: fit-content;
+  padding: 0px 2px;
+}
+
+.control-metadata .status-passed div,
+.result-metadata .status-passed div  {
+  background-color: darkgreen;
+}
+.control-metadata .status-failed div,
+.result-metadata .status-failed div {
+  background-color: red;
+}
+.control-metadata .status-skipped div,
+.result-metadata .status-skipped div  {
+  background-color: grey;
+}
+.result-metadata,
+.control-metadata {
+  margin: 0 0 0 5%;
+}
+
+.selector-panel {
+  position: fixed;
+  z-index: 100;
+  background-color: #ccc;
+  padding: 10px;
+  top: 0;
+  margin-left: -10%;
+  border-bottom-right-radius: 10px;
+}
+
+@media print {
+  .selector-panel {
+     visibility: hidden;
+  }
+}
+
+.inspec-summary {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px auto;
+  width: fit-content
+}
+
+.inspec-summary h4 {
+  margin-bottom: 0px;
+}
+
+.inspec-summary #platform, .inspec-summary #statistics {
+  display: inline;
+}
+
+#statistics .date td {
+  width: 100px
+}
+
+#inspec-version {
+  display: block;
+  text-align: center;
+  font-style: italic;
+}
+
+    </style>
+    <script type="text/javascript">
+    // <![CDATA[
+    /* Must inline all JavaScript files, this is a single-file output that may be airgapped */
+    
+/* CSS primitives */
+function addCssClass(id, cls) {
+  document.getElementById(id).className += (" " + cls);
+}
+
+function removeCssClass(id, cls) {
+  var el = document.getElementById(id);
+  var classes = el.className.replace(cls,'');
+  el.className = classes;
+}
+
+function handleShowSource(evt) {
+  var control_id = evt.srcElement.id.replace("show-code-", "")
+  addCssClass(evt.srcElement.id, "hidden")
+  removeCssClass("hide-code-" + control_id, "hidden")
+  removeCssClass("source-code-" + control_id, "hidden")
+}
+
+function handleHideSource(evt) {
+  var control_id = evt.srcElement.id.replace("hide-code-", "")
+  addCssClass(evt.srcElement.id, "hidden")
+  addCssClass("source-code-" + control_id, "hidden")
+  removeCssClass("show-code-" + control_id, "hidden")
+}
+
+function handleSelectorChange(evt) {
+  var should_show = evt.srcElement.checked
+  var which_group = evt.srcElement.id.replace("-checkbox","")
+  var controls = document.getElementsByClassName("control-status-" + which_group)
+  var i;
+  if (should_show) {
+    for (i = 0; i < controls.length; i++) {
+      removeCssClass(controls[i].id, "hidden")
+    }
+  } else {
+    for (i = 0; i < controls.length; i++) {
+      addCssClass(controls[i].id, "hidden")
+    }
+  }
+}
+
+function handleChildProfileChange(evt) {
+  var should_show = evt.srcElement.checked
+  var child_profiles = document.getElementsByClassName("child-profile")
+  var i;
+  if (should_show) {
+    for (i = 0; i < child_profiles.length; i++) {
+      removeCssClass(child_profiles[i].id, "hidden")
+    }
+  } else {
+    for (i = 0; i < child_profiles.length; i++) {
+      addCssClass(child_profiles[i].id, "hidden")
+    }
+  }
+}
+
+/* Main entry point */
+function  pageLoaded() {
+  var i;
+
+  // wire up show source links
+  var show_links = document.getElementsByClassName("show-source-code");
+  for (i = 0; i < show_links.length; i++) {
+    show_links[i].onclick = handleShowSource;
+  }
+  // wire up hide source links
+  var hide_links = document.getElementsByClassName("hide-source-code");
+  for (i = 0; i < hide_links.length; i++) {
+    hide_links[i].onclick = handleHideSource;
+  }
+  // wire up selector checkboxes
+  var selectors = document.getElementsByClassName("selector-checkbox");
+  for (i = 0; i < selectors.length; i++) {
+    selectors[i].onchange = handleSelectorChange;
+  }
+  // wire up child profile checkbox
+  document.getElementById("child-profile-checkbox").onchange = handleChildProfileChange;
+}
+
+    // ]]>
+    </script>
+  </head>
+  <body onload="pageLoaded()">
+    <div class="selector-panel">
+  <p id="selector-instructions">Display controls that are:</p>
+  <input class="selector-checkbox" id="passed-checkbox" type="checkbox" checked="checked"/><label for="passed-checkbox">Passed</label>
+  <input class="selector-checkbox" id="skipped-checkbox" type="checkbox" checked="checked"/><label for="skipped-checkbox">Skipped</label>
+  <input class="selector-checkbox" id="failed-checkbox" type="checkbox" checked="checked"/><label for="failed-checkbox">Failed</label>
+  <p id="selector-instructions">Display profiles that are:</p>
+  <input class="profile-selector-checkbox" id="child-profile-checkbox" type="checkbox" /><label for="child-profile-checkbox">Dependent Profiles</label>
+</div>
+
+    <div class="inspec-report">
+    <h1>Chef InSpec Report</h1>
+    
+      <div class="profile " id="profile-basebox-ubuntu-18.04-k3s">
+  
+  <h2 class="profile_title">Profile profile for vagrant image ubuntu-18.04-k3s (basebox-ubuntu-18.04-k3s)</h2>
+
+  <table class="profile-metadata info" id="profile-metadata-basebox-ubuntu-18.04-k3s">
+    <tr class="profile-version"><th>Version:</th><td>1.0.0</td></tr>
+    
+    <tr class="profile-summary"><th>Summary:</th><td>vagrant baseline checks</td></tr>
+    
+    
+    
+  </table>
+
+  
+    
+      
+
+
+<div class="control control-status-passed" id="control-docker-1.0">
+
+  
+
+  <h3 class="control-title">Control <code>docker-1.0</code></h3>
+  <table class="control-metadata info" id="control-metadata-docker-1.0">
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    <tr class="title"><th>Title:</th><td>check if docker is installed</td></tr> 
+    <tr class="desc"><th>Description:</th><td>check docker package</td></tr> 
+    <tr class="impact impact-high"><th>Impact:</th><td>1.0</td></tr> 
+    
+    
+    <tr class="code">
+      <th>Source Code:</th>
+      <td>
+        <input type="button" class="show-source-code" id="show-code-docker-1.0" value="Show Source"/>
+        <input type="button" class="hide-source-code hidden" id="hide-code-docker-1.0" value="Hide Source"/>
+        <pre class="source-code hidden" id="source-code-docker-1.0">
+          <code>
+control "docker-1.0" do                     # A unique ID for this control
+  impact 1.0                                # The criticality, if this control fails.
+  title "check if docker is installed"      # A human-readable title
+  desc "check docker package"
+  describe packages(/docker/) do           # The actual test
+    its('statuses') { should cmp 'installed' } 
+  end
+end
+
+          </code>
+        </pre>
+      </td>
+    </tr>
+  <!-- TODO waiver data -->
+
+  </table>
+
+  
+    
+<div class="result" id="result-Packages__docker_">
+  <h4 class="resource-title">Resource <code>Packages /docker/</code></h4>
+  <table class="result-metadata info">
+    <tr class="expectation_message"><th>Test:</th><td><code>statuses is expected to cmp == "installed"</code></td></tr>
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    
+    
+    <tr class="duration"><th>Duration:</th><td>0.0002421 seconds</td></tr>
+  </table>
+</div>
+
+  
+
+</div>
+
+    
+      
+
+
+<div class="control control-status-passed" id="control-docker-2.0">
+
+  
+
+  <h3 class="control-title">Control <code>docker-2.0</code></h3>
+  <table class="control-metadata info" id="control-metadata-docker-2.0">
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    <tr class="title"><th>Title:</th><td>check if docker is running</td></tr> 
+    <tr class="desc"><th>Description:</th><td>check docker service</td></tr> 
+    <tr class="impact impact-high"><th>Impact:</th><td>1.0</td></tr> 
+    
+    
+    <tr class="code">
+      <th>Source Code:</th>
+      <td>
+        <input type="button" class="show-source-code" id="show-code-docker-2.0" value="Show Source"/>
+        <input type="button" class="hide-source-code hidden" id="hide-code-docker-2.0" value="Hide Source"/>
+        <pre class="source-code hidden" id="source-code-docker-2.0">
+          <code>
+control "docker-2.0" do                     # A unique ID for this control
+  impact 1.0                                # The criticality, if this control fails.
+  title "check if docker is running"        # A human-readable title
+  desc "check docker service"
+  describe service('docker') do
+    it { should be_installed }
+    it { should be_enabled }
+    it { should be_running }
+  end
+end
+
+          </code>
+        </pre>
+      </td>
+    </tr>
+  <!-- TODO waiver data -->
+
+  </table>
+
+  
+    
+<div class="result" id="result-Service_docker">
+  <h4 class="resource-title">Resource <code>Service docker</code></h4>
+  <table class="result-metadata info">
+    <tr class="expectation_message"><th>Test:</th><td><code>is expected to be installed</code></td></tr>
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    
+    
+    <tr class="duration"><th>Duration:</th><td>0.0982691 seconds</td></tr>
+  </table>
+</div>
+
+  
+    
+<div class="result" id="result-Service_docker">
+  <h4 class="resource-title">Resource <code>Service docker</code></h4>
+  <table class="result-metadata info">
+    <tr class="expectation_message"><th>Test:</th><td><code>is expected to be enabled</code></td></tr>
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    
+    
+    <tr class="duration"><th>Duration:</th><td>0.0002657 seconds</td></tr>
+  </table>
+</div>
+
+  
+    
+<div class="result" id="result-Service_docker">
+  <h4 class="resource-title">Resource <code>Service docker</code></h4>
+  <table class="result-metadata info">
+    <tr class="expectation_message"><th>Test:</th><td><code>is expected to be running</code></td></tr>
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    
+    
+    <tr class="duration"><th>Duration:</th><td>0.0002437 seconds</td></tr>
+  </table>
+</div>
+
+  
+
+</div>
+
+    
+      
+
+
+<div class="control control-status-passed" id="control-k3s-1.0">
+
+  
+
+  <h3 class="control-title">Control <code>k3s-1.0</code></h3>
+  <table class="control-metadata info" id="control-metadata-k3s-1.0">
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    <tr class="title"><th>Title:</th><td>check if k3s command exists</td></tr> 
+    <tr class="desc"><th>Description:</th><td>check k3s command</td></tr> 
+    <tr class="impact impact-high"><th>Impact:</th><td>1.0</td></tr> 
+    
+    
+    <tr class="code">
+      <th>Source Code:</th>
+      <td>
+        <input type="button" class="show-source-code" id="show-code-k3s-1.0" value="Show Source"/>
+        <input type="button" class="hide-source-code hidden" id="hide-code-k3s-1.0" value="Hide Source"/>
+        <pre class="source-code hidden" id="source-code-k3s-1.0">
+          <code>
+control "k3s-1.0" do                        # A unique ID for this control
+  impact 1.0                                # The criticality, if this control fails.
+  title "check if k3s command exists"       # A human-readable title
+  desc "check k3s command"
+  describe command('k3s --version') do
+    its('exit_status') { should eq 0 }
+  end
+end
+
+          </code>
+        </pre>
+      </td>
+    </tr>
+  <!-- TODO waiver data -->
+
+  </table>
+
+  
+    
+<div class="result" id="result-Command___k3s___version_">
+  <h4 class="resource-title">Resource <code>Command: `k3s --version`</code></h4>
+  <table class="result-metadata info">
+    <tr class="expectation_message"><th>Test:</th><td><code>exit_status is expected to eq 0</code></td></tr>
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    
+    
+    <tr class="duration"><th>Duration:</th><td>0.0414641 seconds</td></tr>
+  </table>
+</div>
+
+  
+
+</div>
+
+    
+      
+
+
+<div class="control control-status-passed" id="control-tmp-1.0">
+
+  
+
+  <h3 class="control-title">Control <code>tmp-1.0</code></h3>
+  <table class="control-metadata info" id="control-metadata-tmp-1.0">
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    <tr class="title"><th>Title:</th><td>Create /tmp directory</td></tr> 
+    <tr class="desc"><th>Description:</th><td>Create /tmp directory</td></tr> 
+    <tr class="impact impact-high"><th>Impact:</th><td>0.7</td></tr> 
+    
+    
+    <tr class="code">
+      <th>Source Code:</th>
+      <td>
+        <input type="button" class="show-source-code" id="show-code-tmp-1.0" value="Show Source"/>
+        <input type="button" class="hide-source-code hidden" id="hide-code-tmp-1.0" value="Hide Source"/>
+        <pre class="source-code hidden" id="source-code-tmp-1.0">
+          <code>
+control "tmp-1.0" do                        # A unique ID for this control
+  impact 0.7                                # The criticality, if this control fails.
+  title "Create /tmp directory"             # A human-readable title
+  desc "Create /tmp directory"
+  describe file("/tmp") do                  # The actual test
+    it { should be_directory }
+  end
+end
+
+          </code>
+        </pre>
+      </td>
+    </tr>
+  <!-- TODO waiver data -->
+
+  </table>
+
+  
+    
+<div class="result" id="result-File__tmp">
+  <h4 class="resource-title">Resource <code>File /tmp</code></h4>
+  <table class="result-metadata info">
+    <tr class="expectation_message"><th>Test:</th><td><code>is expected to be directory</code></td></tr>
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    
+    
+    <tr class="duration"><th>Duration:</th><td>0.1457768 seconds</td></tr>
+  </table>
+</div>
+
+  
+
+</div>
+
+    
+      
+
+
+<div class="control control-status-passed" id="control-user-1.0">
+
+  
+
+  <h3 class="control-title">Control <code>user-1.0</code></h3>
+  <table class="control-metadata info" id="control-metadata-user-1.0">
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    <tr class="title"><th>Title:</th><td>check if vagrant user exists</td></tr> 
+    <tr class="desc"><th>Description:</th><td>check vagrant user</td></tr> 
+    <tr class="impact impact-high"><th>Impact:</th><td>1.0</td></tr> 
+    
+    
+    <tr class="code">
+      <th>Source Code:</th>
+      <td>
+        <input type="button" class="show-source-code" id="show-code-user-1.0" value="Show Source"/>
+        <input type="button" class="hide-source-code hidden" id="hide-code-user-1.0" value="Hide Source"/>
+        <pre class="source-code hidden" id="source-code-user-1.0">
+          <code>
+control "user-1.0" do                       # A unique ID for this control
+  impact 1.0                                # The criticality, if this control fails.
+  title "check if vagrant user exists"      # A human-readable title
+  desc "check vagrant user"
+  describe user("vagrant") do               # The actual test
+    it { should exist }
+  end
+end
+
+          </code>
+        </pre>
+      </td>
+    </tr>
+  <!-- TODO waiver data -->
+
+  </table>
+
+  
+    
+<div class="result" id="result-User_vagrant">
+  <h4 class="resource-title">Resource <code>User vagrant</code></h4>
+  <table class="result-metadata info">
+    <tr class="expectation_message"><th>Test:</th><td><code>is expected to exist</code></td></tr>
+    <tr class="status status-passed"><th>Status:</th><td><div>Passed</div></td></tr>
+    
+    
+    <tr class="duration"><th>Duration:</th><td>0.0333242 seconds</td></tr>
+  </table>
+</div>
+
+  
+
+</div>
+
+    
+  
+</div>
+
+    
+
+    <div class="inspec-summary">
+      <table id="platform" class="info">
+        <tr><th colspan=2><h4 id="platform-label">Platform Information</h4></th></tr>
+        <tr class= "name"><th>Name:</th><td>ubuntu</td></tr>
+        <tr class= "release"><th>Release:</th><td>18.04</td></tr>
+        <tr class= "target"><th>Target:</th><td>ssh://ELEGOEV-20H2\cxtla@127.0.0.1:61954</td></tr>
+      </table>
+      <table id="statistics" class="info">
+        <tr><th colspan="2"><h4 id="statistics-label">Control Statistics</h4></th></tr>
+        <tr class= "passed"><th>Passed:</th><td>5</td></tr>
+        <tr class= "skipped"><th>Skipped:</th><td>0</td></tr>
+        <tr class= "failed"><th>Failed:</th><td>0</td></tr>
+        <tr class= "duration"><th>Duration:</th><td>0.3338668 seconds</td></tr>
+        <tr class= "date"><th>Time Finished:</th><td>2021-02-17 13:19:09 +0100</td></tr>
+      </table>
+      <span id="inspec-version">Chef InSpec version 4.24.8</span>
+    </div>
+    </div>
+  </body>
+</html>
+

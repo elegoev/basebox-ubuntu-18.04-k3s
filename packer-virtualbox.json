@@ -1,0 +1,83 @@
+{
+  "variables": {
+    "src_image_name": "elegoev/ubuntu-18.04-docker",
+    "src_image_version": "3.0.1613488902",
+    "image_name": "ubuntu-18.04-k3s",
+    "image_version": "2.0.{{timestamp}}",
+    "cloud_token": "{{ env `PACKER_VAGRANTCLOUD_TOKEN` }}",
+    "inspec_profile": "baseline-ubuntu-18.04-k3s",
+    "inspec_report": "/inspec/inspec_html_report/baseline-ubuntu-18.04-k3s_report.html",
+    "inspec_cis_report": "/inspec/inspec_html_report/baseline-ubuntu-18.04-k3s_cis_report.html",
+    "github_repo": "https://github.com/elegoev/basebox-ubuntu-18.04-k3s",
+    "github_repo_version": "{{user `github_repo`}}/tree/{{user `image_version`}}",
+    "github_inspec_report": "{{user `github_repo`}}/blob/{{user `image_version`}}{{user `inspec_report`}}",
+    "vagrant_template": "./packer/files-prov/template/Vagrantfile",
+    "vagrantcloud_base_image": "https://app.vagrantup.com/elegoev/boxes/ubuntu-18.04-docker/versions/{{user `src_image_version`}}",
+    "application_info": "https://github.com/elegoev/basebox-ubuntu-18.04-k3s/blob/{{user `image_version`}}/installed-application.md"
+  },
+  "builders": [
+    {
+      "type": "vagrant",
+      "communicator": "ssh",
+      "source_path": "{{user `src_image_name`}}",
+      "box_version": "{{user `src_image_version`}}",
+      "output_dir": "packer_build_dir",
+      "template": "{{user `vagrant_template`}}",
+      "box_name": "basebox-{{user `image_name`}}",
+      "provider": "virtualbox",
+      "add_force": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "./packer/files-prov",
+      "destination": "/home/vagrant/files-prov"
+    },
+    {
+      "type": "shell",
+      "script": "./packer/provisioners/base-provisioning.sh"
+    },
+    {
+      "type": "inspec",
+      "inspec_env_vars": [ "CHEF_LICENSE=accept"],
+      "extra_arguments": [ "--reporter", "cli", "html2:.{{user `inspec_report`}}" ],
+      "profile": "./inspec/{{user `inspec_profile`}}"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "shell-local",
+      "environment_vars": ["IMAGE_NAME={{user `image_name`}}"],
+      "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
+      "env_var_format": "$env:%s=\"%s\"; ",
+      "script": "./packer/post-processors/vagrant-cloud-create-box.ps1"  
+    },
+    {
+      "type": "shell-local",
+      "environment_vars": ["IMAGE_VERSION={{user `image_version`}}"],
+      "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
+      "env_var_format": "$env:%s=\"%s\"; ",
+      "script": "./packer/post-processors/create-git-tag.ps1"  
+    },
+    {
+      "type": "vagrant-cloud",
+      "box_tag": "elegoev/{{user `image_name`}}",
+      "version": "{{user `image_version`}}",
+      "version_description": "***\n[[github info]]({{user `github_repo_version`}})[[inspec report]](https://htmlpreview.github.io/?{{user `github_inspec_report`}})[[application]]({{user `application_info`}})[[basebox {{user `src_image_name`}}]]({{user `vagrantcloud_base_image`}})",
+      "access_token": "{{user `cloud_token`}}"
+    },
+    {
+      "type": "shell-local",
+      "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
+      "env_var_format": "$env:%s=\"%s\"; ",
+      "script": "./packer/post-processors/cleanup.ps1"  
+    }
+  ],
+  "error-cleanup-provisioner": {
+    "type": "shell-local",
+    "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
+    "env_var_format": "$env:%s=\"%s\"; ",
+    "script": "./packer/error-cleanup-provisioner.ps1"  
+  }
+}

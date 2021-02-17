@@ -1,0 +1,10 @@
+name: basebox-ubuntu-18.04-k3s
+title: profile for vagrant image ubuntu-18.04-k3s
+maintainer: Urs Voegele
+copyright: Urs Voegele
+copyright_email: unext@bluewin.com
+license: Apache-2.0
+summary: vagrant baseline checks
+version: 1.0.0
+supports:
+  platform: os
