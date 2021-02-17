@@ -4,7 +4,7 @@ Vagrant Box with Ubuntu 18.04 and k3s
 
 ## Base image
 
-Used base image [elegoev/ubuntu-18.04](https://app.vagrantup.com/elegoev/boxes/ubuntu-18.04)
+Used base image [elegoev/ubuntu-18.04-docker](https://app.vagrantup.com/elegoev/boxes/ubuntu-18.04-docker)
 
 ## Directory Description
 
@@ -68,6 +68,13 @@ Used base image [elegoev/ubuntu-18.04](https://app.vagrantup.com/elegoev/boxes/u
 
 - [k3s.io](https://k3s.io/)
 - [k3s github](https://github.com/rancher/k3s)
+- [Youtube - Client-side load balancing in K3s Kubernetes clusters - Darren Shepherd](https://www.youtube.com/watch?v=1Fet0qZdQrM&feature=push-fr&attr_tag=CHXdTQwrjrGmVaZI%3A6)
+- [Youtube - K3s Under the Hood: Building a Product-grade Lightweight Kubernetes Distro - Darren Shepherd](https://www.youtube.com/watch?v=-HchRyqNtkU)
+- [Running K3s, Lightweight Kubernetes, in Production for the Edge & Beyond - Darren Shepherd, Rancher](https://www.youtube.com/watch?v=aR12Oij4CYw)
+- [k3s - Lightweight Kubernetes](https://k3s.io/)
+- [k3s Internals: The Crazy Things We Do To Make k8s Simple](https://www.youtube.com/watch?utm_campaign=Kubernetes+Master+Class+Training+Series&utm_medium=email&_hsmi=106166717&_hsenc=p2ANqtz-9nojjUWpAqIUUAjneyQ_T2n9iUg9bp8v1SUbHJSCAHPxxNm6jjVSqUfSST8SdPH3WzNtaDdQoRM13e4QCsEJ5Y1eAOaA&utm_content=106166717&utm_source=hs_email&v=k58WnbKmjdA&feature=youtu.be)
+- [Create a Self-Contained and Portable Kubernetes Cluster With K3S and Packer](https://medium.com/better-programming/create-a-self-contained-and-portable-kubernetes-cluster-with-k3s-and-packer-16aa43899e2f)
+
 
 ### Versioning
 
