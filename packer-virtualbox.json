@@ -1,7 +1,7 @@
 {
   "variables": {
     "src_image_name": "elegoev/ubuntu-18.04-docker",
-    "src_image_version": "3.0.1613488902",
+    "src_image_version": "3.0.1613669043",
     "image_name": "ubuntu-18.04-k3s",
     "image_version": "2.0.{{timestamp}}",
     "cloud_token": "{{ env `PACKER_VAGRANTCLOUD_TOKEN` }}",

@@ -3,7 +3,7 @@ Vagrant.configure("2") do |config|
     $basebox_name="basebox-ubuntu-18.04-k3s-test"
     $basebox_hostname="ubuntu-1804-k3s-test"
     $src_image_name="elegoev/ubuntu-18.04-docker"
-    $src_image_version="3.0.1613488902"
+    $src_image_version="3.0.1613669043"
 
     scriptlist = Array[]
     scriptlist = Dir.glob("../../packer/provisioners/*").sort    
