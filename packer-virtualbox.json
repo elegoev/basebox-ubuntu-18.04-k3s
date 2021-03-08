@@ -1,7 +1,7 @@
 {
   "variables": {
-    "src_image_name": "elegoev/ubuntu-18.04-docker",
-    "src_image_version": "3.0.1613669043",
+    "src_image_name": "{{ env `SRC_IMAGE_NAME` }}",
+    "src_image_version": "{{ env `SRC_IMAGE_VERSION` }}",
     "image_name": "ubuntu-18.04-k3s",
     "image_version": "2.0.{{timestamp}}",
     "cloud_token": "{{ env `PACKER_VAGRANTCLOUD_TOKEN` }}",
@@ -30,11 +30,6 @@
   ],
   "provisioners": [
     {
-      "type": "file",
-      "source": "./packer/files-prov",
-      "destination": "/home/vagrant/files-prov"
-    },
-    {
       "type": "shell",
       "script": "./packer/provisioners/base-provisioning.sh"
     },
@@ -52,6 +47,16 @@
       "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
       "env_var_format": "$env:%s=\"%s\"; ",
       "script": "./packer/post-processors/vagrant-cloud-create-box.ps1"  
+    },
+    {
+      "type": "shell-local",
+      "environment_vars": [
+        "IMAGE_NAME={{user `image_name`}}",
+        "IMAGE_VERSION={{user `image_version`}}"
+       ],
+      "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
+      "env_var_format": "$env:%s=\"%s\"; ",
+      "script": "./packer/post-processors/set-environment.ps1"  
     },
     {
       "type": "shell-local",
