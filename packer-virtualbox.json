@@ -13,7 +13,20 @@
     "github_inspec_report": "{{user `github_repo`}}/blob/{{user `image_version`}}{{user `inspec_report`}}",
     "vagrant_template": "./packer/files-prov/template/Vagrantfile",
     "vagrantcloud_base_image": "https://app.vagrantup.com/elegoev/boxes/ubuntu-18.04-docker/versions/{{user `src_image_version`}}",
-    "application_info": "https://github.com/elegoev/basebox-ubuntu-18.04-k3s/blob/{{user `image_version`}}/installed-application.md"
+    "application_info": "https://github.com/elegoev/basebox-ubuntu-18.04-k3s/blob/{{user `image_version`}}/installed-application.md",
+
+    "vagrant_hostname": "app.vagrantup.com",
+    "packer_build_dir": "packer_build_dir",
+    "box_namespace": "elegoev",
+    "box_name": "{{user `image_name`}}",
+    "box_version": "{{user `image_version`}}",
+    "box_provider": "virtualbox",
+    "box_file": "./{{user `packer_build_dir`}}/package.box",
+    "box_description": "ubuntu 18.04 basebox",
+    "box_shortdescription": "vagrant basebox with ubuntu 18.04 and k3s",
+    "box_versiondescription": "***\n[[github info]]({{user `github_repo_version`}})[[inspec report]](https://htmlpreview.github.io/?{{user `github_inspec_report`}})[[application]]({{user `application_info`}})[[basebox {{user `src_image_name`}}]]({{user `vagrantcloud_base_image`}})"
+
+
   },
   "builders": [
     {
@@ -43,13 +56,6 @@
   "post-processors": [
     {
       "type": "shell-local",
-      "environment_vars": ["IMAGE_NAME={{user `image_name`}}"],
-      "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
-      "env_var_format": "$env:%s=\"%s\"; ",
-      "script": "./packer/post-processors/vagrant-cloud-create-box.ps1"  
-    },
-    {
-      "type": "shell-local",
       "environment_vars": [
         "IMAGE_NAME={{user `image_name`}}",
         "IMAGE_VERSION={{user `image_version`}}"
@@ -66,11 +72,22 @@
       "script": "./packer/post-processors/create-git-tag.ps1"  
     },
     {
-      "type": "vagrant-cloud",
-      "box_tag": "elegoev/{{user `image_name`}}",
-      "version": "{{user `image_version`}}",
-      "version_description": "***\n[[github info]]({{user `github_repo_version`}})[[inspec report]](https://htmlpreview.github.io/?{{user `github_inspec_report`}})[[application]]({{user `application_info`}})[[basebox {{user `src_image_name`}}]]({{user `vagrantcloud_base_image`}})",
-      "access_token": "{{user `cloud_token`}}"
+      "type": "shell-local",
+      "environment_vars": [
+                            "IMAGE_NAME={{user `image_name`}}",
+                            "BOX_NAMESPACE={{user `box_namespace`}}",
+                            "BOX_NAME={{user `box_name`}}",
+                            "BOX_VERSION={{user `box_version`}}",
+                            "BOX_PROVIDER={{user `box_provider`}}",
+                            "BOX_FILE={{user `box_file`}}",
+                            "BOX_DESCRIPTION={{user `box_description`}}",
+                            "BOX_SHORTDESCRIPTION={{user `box_shortdescription`}}",
+                            "BOX_VERSIONDESCRIPTION={{user `box_versiondescription`}}",
+                            "VAGRANT_HOSTNAME={{user `vagrant_hostname`}}"
+                          ],
+      "execute_command": ["powershell.exe", "{{.Vars}} {{.Script}}"],
+      "env_var_format": "$env:%s=\"%s\"; ",
+      "script": "./packer/post-processors/vagrant-cloud-publish-box.ps1"  
     },
     {
       "type": "shell-local",
